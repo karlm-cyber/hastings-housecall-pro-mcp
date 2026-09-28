@@ -1,5 +1,6 @@
 import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
+import { authorize } from "../../../lib/oauth.js";
 
 const API_BASE = (process.env.HOUSECALL_PRO_API_BASE || "https://api.housecallpro.com").replace(/\/$/, "");
 
@@ -53,10 +54,8 @@ const mcpHandler = createMcpHandler((server) => {
 });
 
 async function authorized(request) {
-  const expected = process.env.CONNECTOR_ACCESS_TOKEN;
-  const supplied = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
-  if (!expected) return Response.json({ error: "CONNECTOR_ACCESS_TOKEN is not configured" }, { status: 503 });
-  if (supplied !== expected) return Response.json({ error: "Unauthorized" }, { status: 401 });
+  const denied = await authorize(request);
+  if (denied) return denied;
   return mcpHandler(request);
 }
 

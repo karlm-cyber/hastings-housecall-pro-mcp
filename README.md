@@ -1,5 +1,8 @@
 # Hastings Housecall Pro MCP
 
+**OAuth update:** Follow OAUTH-SETUP.md instead of the legacy token setup below.
+The static bearer password is no longer supported. Live OAuth setup is pending.
+
 Read-only remote MCP connector for Housecall Pro. It exposes jobs, customers,
 estimates, job invoices, and employees to a custom ChatGPT app.
 
